@@ -9,12 +9,15 @@
 </head>
 
 <body>
-    <h1>로그인페이지</h1>
+    <h1>ATM 출금</h1>
     <hr />
-    <form action="/join" method="post">
-        <input type="text" name="username" placeholder="Enter username" /><br />
-        <input type="password" name="password" placeholder="Enter password" /><br />
-        <button>로그인</button>
+    <form action="/account/withdraw" method="post">
+        <input type="text" name="amount" placeholder="Enter 출금금액" /><br />
+        <input type="text" name="wAccountNumber" placeholder="Enter 출금계좌번호" />
+        <br />
+        <input type="password" name="wAccountPassword" placeholder="Enter 출금계좌비밀
+번호" /><br />
+        <button>출금</button>
     </form>
 
 </body>
