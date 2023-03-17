@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import shop.mtcoding.bank1.dto.user.JoinReqDto;
+
 @Mapper
 public interface UserRepository {
-    public int insert(User user);
+    public int insert(JoinReqDto joinReqDto);
 
     public int updateById(User user);
 
