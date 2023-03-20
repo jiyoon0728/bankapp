@@ -18,7 +18,7 @@ public class UserService {
     public void 회원가입(JoinReqDto joinReqDto) {
         // mybatis는 인수로 들어온 오브젝트의 변수명으로 자동 매핑해준다.
         int result = userRepository.insert(joinReqDto);
-        if (result != 1) {
+        if (result != 1) {0
             throw new CustomException("회원가입 실패",
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
