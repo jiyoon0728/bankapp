@@ -9,7 +9,7 @@ import shop.mtcoding.bank1.dto.user.LoginReqDto;
 
 @Mapper
 public interface UserRepository {
-    public int insert(JoinReqDto joinReqDto);
+    public int insert(User user);
 
     public int updateById(User user);
 

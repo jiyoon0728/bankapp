@@ -28,8 +28,12 @@ public class UserController {
     private HttpSession session;
 
     // SELECT 요청이지만 로그인만 post로 한다. (예외임!!)
+    // 로그인은 post로 해야한다 !왜?쿼리스트링(get)으로 패스워드를 남기게되면 주소에 남아버리게된다
+
     @PostMapping("/login")
     public String login(LoginReqDto loginReqDto) {
+        // 바디데이터가 있으면 validation체크를 꼭 하자!
+        // 1.유효성 검사
         if (loginReqDto.getUsername() == null || loginReqDto.getUsername().isEmpty()) {
             throw new CustomException("username을 입력해주세요", HttpStatus.BAD_REQUEST);
         }
