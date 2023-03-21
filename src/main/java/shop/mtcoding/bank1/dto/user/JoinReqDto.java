@@ -1,9 +1,8 @@
 package shop.mtcoding.bank1.dto.user;
 
-import org.apache.catalina.User;
-
 import lombok.Getter;
 import lombok.Setter;
+import shop.mtcoding.bank1.model.user.User;
 
 @Getter
 @Setter
@@ -16,7 +15,7 @@ public class JoinReqDto {
         User user = new User();
         user.setUsername(username);
         user.setPassword(password);
-        user.setFullName(fullname);
+        user.setFullname(fullname);
         return user;
     }
 }

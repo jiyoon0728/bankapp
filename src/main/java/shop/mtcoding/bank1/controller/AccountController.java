@@ -1,16 +1,21 @@
 package shop.mtcoding.bank1.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import shop.mtcoding.bank1.dto.account.AccountSaveReqDto;
 import shop.mtcoding.bank1.handler.CustomException;
+import shop.mtcoding.bank1.model.account.Account;
+import shop.mtcoding.bank1.model.account.AccountRepository;
 import shop.mtcoding.bank1.model.user.User;
 import shop.mtcoding.bank1.service.AccountService;
 
@@ -23,14 +28,14 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    private AccountRepository accountRepository;
+
     @PostMapping("/account")
     public String save(AccountSaveReqDto accountSaveReqDto) {
         User principal = (User) session.getAttribute("principal");
-        // 여기서 (User)로 다운캐스팅 하는 이유 : getAttribute는 모든
         if (principal == null) {
-            // return "redirect:/loginForm";
-            throw new CustomException("로그인을 다시 해 주세요", HttpStatus.UNAUTHORIZED);
-            // 인증 끝
+            throw new CustomException("로그인을 먼저 해주세요", HttpStatus.UNAUTHORIZED);
         }
 
         if (accountSaveReqDto.getNumber() == null || accountSaveReqDto.getNumber().isEmpty()) {
@@ -39,14 +44,22 @@ public class AccountController {
         if (accountSaveReqDto.getPassword() == null || accountSaveReqDto.getPassword().isEmpty()) {
             throw new CustomException("password를 입력해주세요", HttpStatus.BAD_REQUEST);
         }
-        // 서비스에 계좌생성() 호츨
+
         accountService.계좌생성(accountSaveReqDto, principal.getId());
 
         return "redirect:/";
     }
 
     @GetMapping({ "/", "/account" })
-    public String main() {
+    public String main(Model model) { // model에 값을 추가하면 request에 저장된다
+        // 1. 인증검사
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            return "redirect:/loginForm";
+        }
+        List<Account> accountList = accountRepository.findByUserId(principal.getId());
+        model.addAttribute("accountList", accountList);
+
         return "account/main";
     }
 
