@@ -28,12 +28,8 @@ public class UserController {
     private HttpSession session;
 
     // SELECT 요청이지만 로그인만 post로 한다. (예외임!!)
-    // 로그인은 post로 해야한다 !왜?쿼리스트링(get)으로 패스워드를 남기게되면 주소에 남아버리게된다
-
     @PostMapping("/login")
     public String login(LoginReqDto loginReqDto) {
-        // 바디데이터가 있으면 validation체크를 꼭 하자!
-        // 1.유효성 검사
         if (loginReqDto.getUsername() == null || loginReqDto.getUsername().isEmpty()) {
             throw new CustomException("username을 입력해주세요", HttpStatus.BAD_REQUEST);
         }
@@ -42,9 +38,8 @@ public class UserController {
         }
 
         // 레파지토리 호출 (조회)
-        // User principal = userRepository.findByUsernameAndPassword(loginReqDto);
-        User principal = new User();
-        principal.setUsername("ssar");
+        User principal = userRepository.findByUsernameAndPassword(loginReqDto);
+
         if (principal == null) {
             throw new CustomException("아이디 혹은 비번이 틀렸습니다", HttpStatus.BAD_REQUEST);
         }
@@ -78,23 +73,23 @@ public class UserController {
      * 1. 그냥 변수, 2. DTO(Object)
      * 주의 : key이름과 변수이름이 동일해야 한다.
      */
-    // @PostMapping("/join")
-    // public String join(JoinReqDto joinReqDto) { // DTO로 받는 것이 좋다.
-    // // 1. POST, PUT일 때만 유효성 검사 (이것보다 우선되는 것이 인증 검사이다)
-    // if (joinReqDto.getUsername() == null || joinReqDto.getUsername().isEmpty()) {
-    // throw new CustomException("username을 입력해주세요", HttpStatus.BAD_REQUEST);
-    // }
-    // if (joinReqDto.getPassword() == null || joinReqDto.getPassword().isEmpty()) {
-    // throw new CustomException("password를 입력해주세요", HttpStatus.BAD_REQUEST);
-    // }
-    // if (joinReqDto.getFullname() == null || joinReqDto.getFullname().isEmpty()) {
-    // throw new CustomException("fullname을 입력해주세요", HttpStatus.BAD_REQUEST);
-    // }
-    // // 컨벤션 : post, put, delete 할때만 하기
-    // // 서비스 호출 => 회원가입();
-    // userService.회원가입(joinReqDto);
-    // return "redirect:/loginForm";
-    // }
+    @PostMapping("/join")
+    public String join(JoinReqDto joinReqDto) { // DTO로 받는 것이 좋다.
+        // 1. POST, PUT일 때만 유효성 검사 (이것보다 우선되는 것이 인증 검사이다)
+        if (joinReqDto.getUsername() == null || joinReqDto.getUsername().isEmpty()) {
+            throw new CustomException("username을 입력해주세요", HttpStatus.BAD_REQUEST);
+        }
+        if (joinReqDto.getPassword() == null || joinReqDto.getPassword().isEmpty()) {
+            throw new CustomException("password를 입력해주세요", HttpStatus.BAD_REQUEST);
+        }
+        if (joinReqDto.getFullname() == null || joinReqDto.getFullname().isEmpty()) {
+            throw new CustomException("fullname을 입력해주세요", HttpStatus.BAD_REQUEST);
+        }
+        // 컨벤션 : post, put, delete 할때만 하기
+        // 서비스 호출 => 회원가입();
+        userService.회원가입(joinReqDto);
+        return "redirect:/loginForm";
+    }
 
     @GetMapping("/joinForm")
     public String joinForm() {
