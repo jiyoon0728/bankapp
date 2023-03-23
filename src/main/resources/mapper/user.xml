@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="shop.mtcoding.bank1.model.user.UserRepository">
-     <select id="findAll" resultType="shop.mtcoding.bank.model.user.User">
+     <select id="findAll" resultType="shop.mtcoding.bank1.model.user.User">
         select * from user_tb
     </select>
 
